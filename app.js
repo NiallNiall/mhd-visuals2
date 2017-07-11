@@ -10,6 +10,8 @@ http.listen(port, function() {
 	    console.log('Server running on port ' + port);
 });
 
+var startNum = 0;
+
 // Execute when a connection is made
 io.on('connection', function (socket) {
 
@@ -20,14 +22,22 @@ io.on('connection', function (socket) {
 		socket.emit('draw', data);
 	});
 
+
+	setInterval( function(){
+		console.log(startNum);
+		socket.emit('draw', {
+			    'Name': startNum,
+			    'Color': '#088'
+			 });
+			}, 1000);
+
 });
 
-// var startNum = 0;
 
-// setInterval( function(){
-// 	startNum +=1;
-// 	// socket.emit('draw', startNum);
-// }, 1000);
+setInterval( function(){
+		startNum +=1;		
+	}, 1000);
+
 
 
 // io.on('connection', function(socket){
