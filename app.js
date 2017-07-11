@@ -3,6 +3,12 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
+// Load the Easy midi Stuff
+var easymidi = require('easymidi');
+var inputs = easymidi.getInputs();
+console.log(inputs);
+var input = new easymidi.Input(inputs[2]);
+
 app.use(express.static(__dirname + '/public'));
 
 var port = 3000;
@@ -23,13 +29,24 @@ io.on('connection', function (socket) {
 	});
 
 
-	setInterval( function(){
-		console.log(startNum);
-		socket.emit('draw', {
+input.on('pitch', function (msg) {
+	startNum = msg.value;
+	console.log(msg);
+  // do something with msg
+
+  socket.emit('draw', {
 			    'Name': startNum,
 			    'Color': '#088'
 			 });
-			}, 1000);
+});
+
+	// setInterval( function(){
+	// 	console.log(startNum);
+	// 	socket.emit('draw', {
+	// 		    'Name': startNum,
+	// 		    'Color': '#088'
+	// 		 });
+	// 		}, 1000);
 
 });
 
@@ -40,17 +57,10 @@ io.on('connection', function (socket) {
 
 
 
-var easymidi = require('easymidi');
 
-var inputs = easymidi.getInputs();
-console.log(inputs);
 
-var input = new easymidi.Input(inputs[2]);
-input.on('pitch', function (msg) {
-	startNum = msg.value;
-	console.log(msg);
-  // do something with msg
-});
+
+
 
 // // var JZZ = require('jzz');
 // var Jazz = require('jazz-midi');
