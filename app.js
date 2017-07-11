@@ -17,6 +17,7 @@ io.on('connection', function (socket) {
 	// Initialise a function called draw?
 	socket.on('draw', function (data) {
 		socket.broadcast.emit('draw', data);
+		socket.emit('draw', data);
 	});
 
 });
