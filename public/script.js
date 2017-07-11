@@ -1,7 +1,7 @@
 function sendName(sentName){
 	console.log(sentName);
 
-	document.getElementById("texter").innerHTML = "Paragraph changed!";
+	document.getElementById("texter").innerHTML = "new Words!";
 
 }
 

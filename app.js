@@ -16,17 +16,17 @@ io.on('connection', function (socket) {
 	// Execute when draw is called from frontend
 	// Initialise a function called draw?
 	socket.on('draw', function (data) {
-		socket.emit('draw', data);
+		socket.broadcast.emit('draw', data);
 	});
 
 });
 
-var startNum = 0;
+// var startNum = 0;
 
-setInterval( function(){
-	startNum +=1;
-	socket.emit('draw', startNum);
-}, 1000);
+// setInterval( function(){
+// 	startNum +=1;
+// 	// socket.emit('draw', startNum);
+// }, 1000);
 
 
 // io.on('connection', function(socket){
