@@ -34,46 +34,28 @@ io.on('connection', function (socket) {
 });
 
 
-setInterval( function(){
-		startNum +=1;		
-	}, 1000);
+// setInterval( function(){
+// 		startNum +=1;		
+// 	}, 1000);
 
 
 
-// io.on('connection', function(socket){
-//   console.log('A user connected');
+var easymidi = require('easymidi');
 
-//   //Send a message after a timeout of 4seconds
-//   setTimeout(function(){
-// 		console.log('yoyo')
-// 	}, 4000);
-//   socket.on('disconnect', function () {
-//     console.log('A user disconnected');
-//   });
-// });
+var inputs = easymidi.getInputs();
+console.log(inputs);
 
+var input = new easymidi.Input(inputs[2]);
+input.on('pitch', function (msg) {
+	startNum = msg.value;
+	console.log(msg);
+  // do something with msg
+});
 
+// // var JZZ = require('jzz');
+// var Jazz = require('jazz-midi');
 
-
-// io.on('connection', function (socket) {
-// 	socket.on('draw', function (data) {
-// 		socket.broadcast.emit('draw', data);
-// 	});
-// });
-
-
-// var wscrl = 0;
-
-// setInterval(function () {
-// 	// console.log('boo');
-// 	if(wscrl < 3){
-// 		wscrl +=1;
-// 	} else {
-// 		wscrl = 0;
-// 	}
-// 	console.log(wscrl);
-
-// 	io.sockets.emit('users_count', clients);
-
-// }, 1000);
-
+// var info=Jazz.MidiInInfo(0);
+// if(info.length>=3){
+//   console.log("Name: "+info[0]+"\nManufacturer: "+info[1]+"\nVersion: "+info[2]);
+// }

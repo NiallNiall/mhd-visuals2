@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "author": "Peter Stakoun",
   "dependencies": {
+    "easymidi": "0.0.2",
     "express": "^4.14.1",
+    "jazz-midi": "^1.5.4",
     "socket.io": "^1.7.2"
   }
 }
