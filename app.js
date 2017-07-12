@@ -53,7 +53,11 @@ io.on('connection', function(socket) {
             if(msg.value > 120) {
 	            console.log('BOOM!');
             }
-            beatVar = msg.value;
+            // if(msg.value > 40) {
+	            beatVar = msg.value;
+	        // } else {
+	        // 	beatVar = 0;
+	        // }
         }
         // console.log(msg);
         // do something with msg

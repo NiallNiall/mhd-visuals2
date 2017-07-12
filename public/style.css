@@ -6,6 +6,10 @@ html, body {
 
 #canvas {
 	display: block;
+	position: absolute;
+	z-index: 20;
+	/*background: #f00;*/
+	/*width: 100%;*/
 }
 
 
@@ -31,8 +35,10 @@ html, body {
 	font-size: 84px;
 	width:100%;
 	text-align: center;
+	display: none;
 }
 
 .mainText.second {
-	top: 200px;
+	bottom: 50px;
+	/*display: block;*/
 }
