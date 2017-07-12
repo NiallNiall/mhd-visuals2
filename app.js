@@ -13,40 +13,56 @@ app.use(express.static(__dirname + '/public'));
 
 var port = 3000;
 http.listen(port, function() {
-	    console.log('Server running on port ' + port);
+    console.log('Server running on port ' + port);
 });
 
 var startNum = 0;
+var playing = false;
 
 // Execute when a connection is made
-io.on('connection', function (socket) {
+io.on('connection', function(socket) {
 
-	// Execute when draw is called from frontend
-	// Initialise a function called draw?
-	socket.on('draw', function (data) {
-		socket.broadcast.emit('draw', data);
-		socket.emit('draw', data);
-	});
+    // Execute when draw is called from frontend
+    // Initialise a function called draw?
+    socket.on('draw', function(data) {
+        socket.broadcast.emit('draw', data);
+        socket.emit('draw', data);
+    });
 
 
-input.on('pitch', function (msg) {
-	startNum = msg.value;
-	console.log(msg);
-  // do something with msg
+    input.on('pitch', function(msg) {
 
-  socket.emit('draw', {
-			    'Name': startNum,
-			    'Color': '#088'
-			 });
-});
+    	if(msg.channel !== 0){
+	        console.log(msg);
+	    }
 
-	// setInterval( function(){
-	// 	console.log(startNum);
-	// 	socket.emit('draw', {
-	// 		    'Name': startNum,
-	// 		    'Color': '#088'
-	// 		 });
-	// 		}, 1000);
+        if (msg.channel == 5) {
+            startNum = msg.value;
+        }
+
+        if (msg.channel == 6) {
+            if(msg.value > 1){
+            	playing = true;
+            } else {
+            	playing = false
+            }
+        }
+
+        if (msg.channel == 10) {
+            if(msg.value > 120) {
+	            console.log('BOOM!');
+            }
+        }
+        // console.log(msg);
+        // do something with msg
+
+        socket.emit('draw', {
+            'Name': startNum,
+            'Color': '#088',
+            'playing': playing
+        });
+    });
+
 
 });
 

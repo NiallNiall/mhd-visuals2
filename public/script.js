@@ -7,6 +7,12 @@ function sendColor(sentColor){
 	document.getElementById("mainbox").style.background = sentColor;//"Paragraph changed!";
 }
 
+function sendPlaying(sentPlay){
+	var playingText = 'play';
+	if(sentPlay){playingText = 'play'} else {playingText = 'pause'}
+	document.getElementById("startstop").innerHTML = playingText;//"Paragraph changed!";
+}
+
 
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -26,7 +32,8 @@ document.addEventListener("DOMContentLoaded", function() {
   		// This gets sent to all
 	  	socket.emit('draw', {
 		    'Name': nameTest,
-		    'Color': colorTest
+		    'Color': colorTest,
+		    'playing': true
 		 });
 
 	  	// sendName(nameTest);
@@ -41,7 +48,8 @@ document.addEventListener("DOMContentLoaded", function() {
   		// This gets sent to all
 	  	socket.emit('draw', {
 		    'Name': nameTest,
-		    'Color': colorTest
+		    'Color': colorTest,
+		    'playing': false
 		 });
 
 	  	// sendName(nameTest);
@@ -52,6 +60,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	socket.on('draw', function(data) {
 	  sendName(data.Name);
 	  sendColor(data.Color);
+	  sendPlaying(data.playing);
 	});
 
 });

@@ -29,5 +29,10 @@ html, body {
 	z-index: 999;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-size: 84px;
-	margin: auto;
+	width:100%;
+	text-align: center;
+}
+
+.mainText.second {
+	top: 200px;
 }
