@@ -18,6 +18,7 @@ http.listen(port, function() {
 
 var startNum = 0;
 var playing = false;
+var beatVar = 0;
 
 // Execute when a connection is made
 io.on('connection', function(socket) {
@@ -32,9 +33,9 @@ io.on('connection', function(socket) {
 
     input.on('pitch', function(msg) {
 
-    	if(msg.channel !== 0){
-	        console.log(msg);
-	    }
+    	// if(msg.channel !== 0){
+	    //     console.log(msg);
+	    // }
 
         if (msg.channel == 5) {
             startNum = msg.value;
@@ -52,6 +53,7 @@ io.on('connection', function(socket) {
             if(msg.value > 120) {
 	            console.log('BOOM!');
             }
+            beatVar = msg.value;
         }
         // console.log(msg);
         // do something with msg
@@ -59,7 +61,8 @@ io.on('connection', function(socket) {
         socket.emit('draw', {
             'Name': startNum,
             'Color': '#088',
-            'playing': playing
+            'playing': playing,
+            'beat': beatVar
         });
     });
 
