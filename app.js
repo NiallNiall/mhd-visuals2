@@ -20,6 +20,8 @@ var startNum = 0;
 var playing = false;
 var beatVar = 0;
 
+var progress = 0;
+
 // Execute when a connection is made
 io.on('connection', function(socket) {
 
@@ -59,6 +61,11 @@ io.on('connection', function(socket) {
 	        // 	beatVar = 0;
 	        // }
         }
+
+        if(msg.channel == 0) {
+        	progress = msg.value;
+        	console.log(progress);
+        }
         // console.log(msg);
         // do something with msg
 
@@ -66,7 +73,8 @@ io.on('connection', function(socket) {
             'Name': startNum,
             'Color': '#088',
             'playing': playing,
-            'beat': beatVar
+            'beat': beatVar,
+            'progress': progress
         });
     });
 

@@ -59,7 +59,7 @@ function drawAmt(inp, prgrss){
 	// var inp = 64;
 	var arcAmt = jsMap(inp, 0, 127, 0, Math.PI*2);
 
-	var arcAmt2 = jsMap(prgrss, 0, 127, 0, Math.PI*2);
+	var arcAmt2 = jsMap(prgrss, 0, 12400, 0, Math.PI*2);
 
 
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -135,7 +135,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	  sendPlaying(data.playing);
 	  sendBeat(data.beat);
 
-	  drawAmt(data.beat, 45);
+	  drawAmt(data.beat, data.progress);
 	});
 
 });
