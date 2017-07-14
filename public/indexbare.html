@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Music Hackday Visuals</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+
+<body>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+
+        var socket = io.connect();
+
+        // This is listening for an emitted function called myFunc
+        socket.on('myFunc', function(data) {
+        	console.log(data.ting);
+        });
+
+    });
+    </script>
+</body>
+
+</html>

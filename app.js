@@ -80,23 +80,3 @@ io.on('connection', function(socket) {
 
 
 });
-
-
-// setInterval( function(){
-// 		startNum +=1;		
-// 	}, 1000);
-
-
-
-
-
-
-
-
-// // var JZZ = require('jzz');
-// var Jazz = require('jazz-midi');
-
-// var info=Jazz.MidiInInfo(0);
-// if(info.length>=3){
-//   console.log("Name: "+info[0]+"\nManufacturer: "+info[1]+"\nVersion: "+info[2]);
-// }
