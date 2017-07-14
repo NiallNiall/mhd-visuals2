@@ -14,7 +14,7 @@
 
         var socket = io.connect();
 
-        // This is listening for an emitted function called myFunc
+        // This is listening for message called myFunc
         socket.on('myFunc', function(data) {
         	console.log(data.ting);
         });

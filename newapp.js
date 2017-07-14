@@ -10,19 +10,18 @@ http.listen(port, function() {
     console.log('Server running on port ' + port);
 });
 
+
+
+
 // Execute when a connection is made
 io.on('connection', function(socket) {
 
+    console.log(socket);
 
     // send a message called myFunc
     socket.emit('myFunc', {
             'ting': 'bluuuuu'
         });
-
-setInterval(function(){
-    console.log('ssss');
-}, 1000);
-
 
 });
 
