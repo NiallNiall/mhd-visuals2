@@ -5,9 +5,12 @@ var io = require('socket.io')(http);
 
 // Load the Easy midi Stuff
 var easymidi = require('easymidi');
-var inputs = easymidi.getInputs();
-console.log(inputs);
-var input = new easymidi.Input(inputs[2]);
+// var inputs = easymidi.getInputs();
+// console.log(inputs);
+// var input = new easymidi.Input(inputs[2]);
+
+// Make a new Port and name it
+var input = new easymidi.Input('Phonode Midi', true);
 
 app.use(express.static(__dirname + '/public'));
 
