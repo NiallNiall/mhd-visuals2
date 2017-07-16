@@ -55,6 +55,7 @@ function socketest(thisSocket){
 // Execute when a connection is made
 io.on('connection', function(socket) {
 
+    thisSocket = socket;
 
 
     input.on('pitch', function(msg) {
@@ -66,10 +67,10 @@ io.on('connection', function(socket) {
             // console.log(msg.value);
 
             if (msg.value >= 120) {
-                setAvail(socket, true);
+                setAvail(thisSocket, true);
                 // socketest(socket);
             } else {
-                setAvail(socket, false);
+                setAvail(thisSocket, false);
             }
         }
     });

@@ -1,21 +1,55 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Music Hackday Visuals</title>
-		<link rel="stylesheet" href="style.css" />
-		<script src="/socket.io/socket.io.js"></script>
-		
-	</head>
-	<body>
+
+<head>
+    <title>Music Hackday Visuals</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        body {
+            background-color: #000;
+        }
+        </style>
+</head>
+
+<body>
+    <div id="mainbox" class="fullwidth"></div>
+    <script>
+    var clrFade = 255;
+    // Something about this only works if the webpage is running BEFORE the node app and also if there's only one client it is weird..
+    document.addEventListener("DOMContentLoaded", function() {
+
+        var socket = io.connect();
+
+        // This is listening for message called myFunc
+        socket.on('myFunc', function(data) {
+            console.log(data.ting);
+        });
+
+        // This is listening for message called myFunc
+        socket.on('beat', function(data) {
+            console.log(data.ting);
+            clrFade = 255;
+        });
 
 
-		<h1 id="texter" class="mainText first">Start</h1>
+        document.getElementById("mainbox").style.background = 'rgba(' + clrFade + ', ' + clrFade + ', ' + clrFade + ',1.0)'; //"Paragraph changed!";
 
-		<h1 id="startstop" class="mainText second">Stop</h1>
 
-		<div id="mainbox" class="fullwidth"></div>
+        setInterval(function() {
+            if (clrFade > 1) {
+                clrFade -= 5;
+            } else {
+                clrFade = 0;
+            }
+            // console.log(clrFade);
 
-		<canvas id="canvas"></canvas>
-		<script src="script.js"></script>
-	</body>
+            document.getElementById("mainbox").style.background = 'rgba(' + clrFade + ', ' + clrFade + ', ' + clrFade + ',1.0)'; //"Paragraph changed!";
+        }, 10);
+
+
+    });
+    </script>
+</body>
+
 </html>
