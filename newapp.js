@@ -9,6 +9,7 @@ var easymidi = require('easymidi');
 var input = new easymidi.Input('Phonode Midi', true);
 
 
+//Start the server
 app.use(express.static(__dirname + '/public'));
 
 var port = 3000;
@@ -16,12 +17,18 @@ http.listen(port, function() {
     console.log('Server running on port ' + port);
 });
 
-available = true;
-oldAvailable = true;
+var available = true;
+var oldAvailable = true;
+
+function sendBeat(){
+   io.emit('beat', {'ting': 'egg'}); 
+}
 
 
-
-
+function jsMap(val, A, B, a, b) {
+    var mapd = (val - A) * (b - a) / (B - A) + a
+    return mapd;
+}
 
 function setAvail(availBit) {
     available = availBit;
@@ -30,23 +37,13 @@ function setAvail(availBit) {
     } else {
         if (!available) {
             console.log("");
-            // triggerEvent();
         } else {
             console.log("Beat Beat Beat!");
-            // triggerOn();
-             io.emit('beat', {
-                 'ting': 'egg'
-             });
+            sendBeat();
+             
         }
     }
     oldAvailable = available;
-}
-
-
-function socketest(thisSocket){
- io.emit('myFunc', {
-     'ting': 'Beat'
- });
 }
 
 input.on('pitch', function(msg) {
@@ -56,13 +53,16 @@ input.on('pitch', function(msg) {
     }
     if (msg.channel == 10) {
         // console.log(msg.value);
+        var thisVal = Math.floor(jsMap(msg.value, 0, 125 , 255, 0));
+        io.emit('liveBeat', {'clr': thisVal});
+        // console.log(thisVal);
 
-        if (msg.value >= 120) {
-            setAvail(true);
-            // socketest(socket);
-        } else {
-            setAvail(false);
-        }
+        // if (msg.value >= 120) {
+        //     setAvail(true);
+        //     // socketest(socket);
+        // } else {
+        //     setAvail(false);
+        // }
     }
 });
 // var cntr = 0;

@@ -16,7 +16,14 @@
     <div id="mainbox" class="fullwidth"></div>
     <script>
     var clrFade = 255;
-    // Something about this only works if the webpage is running BEFORE the node app and also if there's only one client it is weird..
+
+    var bgBox = document.getElementById("mainbox");
+
+    function setBoxClr(thisBox, thisClr) {
+        thisBox.style.background = 'rgba(' + thisClr + ', ' + thisClr + ', ' + thisClr + ',1.0)';
+    }
+
+    // The problem was I just needed to use io.emit!
     document.addEventListener("DOMContentLoaded", function() {
 
         var socket = io.connect();
@@ -32,20 +39,28 @@
             clrFade = 255;
         });
 
+        socket.on('liveBeat', function(data) {
+            // var thisFade = 255 - data.clr;
+            var thisFade = data.clr;
+            // console.log(data.clr);
+            // console.log(thisFade);
+            setBoxClr(bgBox, thisFade);
+        });
 
-        document.getElementById("mainbox").style.background = 'rgba(' + clrFade + ', ' + clrFade + ', ' + clrFade + ',1.0)'; //"Paragraph changed!";
+
+        // setBoxClr(bgBox, clrFade);
 
 
-        setInterval(function() {
-            if (clrFade > 1) {
-                clrFade -= 5;
-            } else {
-                clrFade = 0;
-            }
-            // console.log(clrFade);
+        // setInterval(function() {
+        //     if (clrFade > 1) {
+        //         clrFade -= 5;
+        //     } else {
+        //         clrFade = 0;
+        //     }
+        //     // console.log(clrFade);
 
-            document.getElementById("mainbox").style.background = 'rgba(' + clrFade + ', ' + clrFade + ', ' + clrFade + ',1.0)'; //"Paragraph changed!";
-        }, 10);
+        //     setBoxClr(bgBox, clrFade);
+        // }, 10);
 
 
     });
