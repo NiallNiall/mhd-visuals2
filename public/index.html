@@ -4,7 +4,12 @@
 <head>
     <title>Music Hackday Visuals</title>
     <link rel="stylesheet" href="style.css" />
+
     <script src="/socket.io/socket.io.js"></script>
+    <script src="vendor/hammer.min.js"></script>
+    <script src="vendor/hammer-time.min.js"></script>
+    <script src="vendor/paper-full.js"></script>
+
     <style>
         body {
             background-color: #000;
@@ -13,6 +18,8 @@
 </head>
 
 <body>
+    <canvas id="paperCanvas" class="fullWidthCanvas" resize></canvas>
+
     <div id="mainbox" class="fullwidth"></div>
     <script>
     var clrFade = 255;
@@ -41,6 +48,87 @@
         });
 
     });
+
+var myElement = document.getElementById('paperCanvas');
+var mc = new Hammer(myElement);
+
+
+paper.install(window);
+// Only executed our code once the DOM is ready.
+window.onload = function() {
+
+    // Get a reference to the canvas object
+    var canvas = document.getElementById('paperCanvas');
+    // Create an empty project and a view for the canvas:
+    paper.setup(canvas);
+
+    var myCircle = new paper.Path.Circle(new Point(100, 70), 50);
+    myCircle.fillColor = 'Red';
+
+        // Draw the view now:
+    paper.view.draw();
+
+
+    var mouseTool = new paper.Tool();
+
+
+
+    mouseTool.onMouseDown = function(event) {
+    }
+
+    mouseTool.onMouseDrag = function(event) {
+        myCircle.position = event.point;
+    }
+
+    mouseTool.onMouseUp = function(event) {
+
+    }
+
+
+//  //Listen multitouch event for simultation
+// document.body.addEventListener('touchstart', touchStart, false);
+// document.body.addEventListener('touchmove', touchmove, false);
+// document.body.addEventListener('touchend', touchEnd, false);
+
+// var touch = false;
+// function touchStart()
+// {
+//     touch = true;
+// }
+
+// function touchEnd()
+// {
+//     touch = false;
+
+// }
+
+// function touchmove(ev) {
+
+//     if (!touch)
+//         return;
+
+//      //Draw path for each touch
+//     for (var i = 0; i < ev.changedTouches.length; i++)
+//     {
+//         var x1, y1;
+//         x1 = ev.changedTouches[i].pageX;
+//         y1 = ev.changedTouches[i].pageY;
+
+//         myCircle.position = new paper.Point(x1, y1);
+//         // paper.view.draw();
+//         // console.log(x1 + ' ' + y1);
+//     }
+
+
+//     // console.log(ev);
+// }
+
+}
+
+
+
+
+
     </script>
 </body>
 

@@ -12,6 +12,13 @@ html, body {
 	/*width: 100%;*/
 }
 
+.fullWidthCanvas {
+  /*background: #08ff03;*/
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 10;
+}
 
 .fullwidth {
 	position: absolute;

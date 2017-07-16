@@ -17,7 +17,7 @@ http.listen(port, function() {
     console.log('Server running on port ' + port);
 });
 
-
+// Initiliase a function to make maps
 function jsMap(val, A, B, a, b) {
     var mapd = (val - A) * (b - a) / (B - A) + a
     return mapd;
@@ -44,10 +44,7 @@ input.on('pitch', function(msg) {
 
 // Execute when a connection is made
 io.on('connection', function(socket) {
-
     console.log('A New Connection! ' + socket.id)
-
-
 });
 
 // setInterval(function(){ console.log("Hello"); }, 1000);
