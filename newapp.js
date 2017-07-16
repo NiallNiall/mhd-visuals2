@@ -23,7 +23,7 @@ oldAvailable = true;
 
 
 
-function setAvail(thisSocket, availBit) {
+function setAvail(availBit) {
     available = availBit;
     if (oldAvailable == available) {
         // do nothing
@@ -34,9 +34,9 @@ function setAvail(thisSocket, availBit) {
         } else {
             console.log("Beat Beat Beat!");
             // triggerOn();
-            	thisSocket.emit('beat', {
-					'ting': 'egg'
-				});
+             io.emit('beat', {
+                 'ting': 'egg'
+             });
         }
     }
     oldAvailable = available;
@@ -44,43 +44,58 @@ function setAvail(thisSocket, availBit) {
 
 
 function socketest(thisSocket){
-	thisSocket.emit('myFunc', {
-		'ting': 'Beat'
-	});
+ io.emit('myFunc', {
+     'ting': 'Beat'
+ });
 }
 
+input.on('pitch', function(msg) {
+    // console.log(msg);
+    if (msg.channel == 0) {
+        // console.log('videoAPI:' + msg.value);
+    }
+    if (msg.channel == 10) {
+        // console.log(msg.value);
+
+        if (msg.value >= 120) {
+            setAvail(true);
+            // socketest(socket);
+        } else {
+            setAvail(false);
+        }
+    }
+});
+// var cntr = 0;
+
+// setInterval(function(){
+
+// io.emit('myFunc', {
+//     'ting': 'hey'
+// });
+
+// }, 100);
 
 
 
 // Execute when a connection is made
 io.on('connection', function(socket) {
 
-    thisSocket = socket;
+    console.log('A New Connection! ' + socket.id)
 
+    // input.on('pitch', function(msg) {
+    //     if (msg.channel == 10) {
+    //         // console.log(msg.value);
+    //         socket.emit('myFunc', {
+    //             'ting': msg.value
+    //         });
+    //     }
 
-    input.on('pitch', function(msg) {
-        // console.log(msg);
-        if (msg.channel == 0) {
-            // console.log('videoAPI:' + msg.value);
-        }
-        if (msg.channel == 10) {
-            // console.log(msg.value);
+    // });
 
-            if (msg.value >= 120) {
-                setAvail(thisSocket, true);
-                // socketest(socket);
-            } else {
-                setAvail(thisSocket, false);
-            }
-        }
-    });
-
-
-
-    // send a message called myFunc
-    socket.emit('myFunc', {
-        'ting': 'Connected!'
-    });
+    // // send a message called myFunc
+    // socket.emit('myFunc', {
+    //     'ting': 'Connected!'
+    // });
 
 });
 
