@@ -17,34 +17,12 @@ http.listen(port, function() {
     console.log('Server running on port ' + port);
 });
 
-var available = true;
-var oldAvailable = true;
-
-function sendBeat(){
-   io.emit('beat', {'ting': 'egg'}); 
-}
-
 
 function jsMap(val, A, B, a, b) {
     var mapd = (val - A) * (b - a) / (B - A) + a
     return mapd;
 }
 
-function setAvail(availBit) {
-    available = availBit;
-    if (oldAvailable == available) {
-        // do nothing
-    } else {
-        if (!available) {
-            console.log("");
-        } else {
-            console.log("Beat Beat Beat!");
-            sendBeat();
-             
-        }
-    }
-    oldAvailable = available;
-}
 
 input.on('pitch', function(msg) {
     // console.log(msg);
@@ -53,49 +31,22 @@ input.on('pitch', function(msg) {
     }
     if (msg.channel == 10) {
         // console.log(msg.value);
-        var thisVal = Math.floor(jsMap(msg.value, 0, 125 , 255, 0));
-        io.emit('liveBeat', {'clr': thisVal});
-        // console.log(thisVal);
+        var reVal = 0;
+        var valInst = msg.value;
+        // Weird mapping to resync the beat phase
+        if(valInst < 64) {reVal = 64 + valInst;} else {reVal = -64 + valInst;}
 
-        // if (msg.value >= 120) {
-        //     setAvail(true);
-        //     // socketest(socket);
-        // } else {
-        //     setAvail(false);
-        // }
+        var thisVal = Math.floor(jsMap(reVal, 0, 50 , 255, 0));
+        io.emit('liveBeat', {'clr': thisVal});
+        // console.log(valInst + ' / ' + reVal + ' / ' + thisVal);
     }
 });
-// var cntr = 0;
-
-// setInterval(function(){
-
-// io.emit('myFunc', {
-//     'ting': 'hey'
-// });
-
-// }, 100);
-
-
 
 // Execute when a connection is made
 io.on('connection', function(socket) {
 
     console.log('A New Connection! ' + socket.id)
 
-    // input.on('pitch', function(msg) {
-    //     if (msg.channel == 10) {
-    //         // console.log(msg.value);
-    //         socket.emit('myFunc', {
-    //             'ting': msg.value
-    //         });
-    //     }
-
-    // });
-
-    // // send a message called myFunc
-    // socket.emit('myFunc', {
-    //     'ting': 'Connected!'
-    // });
 
 });
 

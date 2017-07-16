@@ -33,35 +33,12 @@
             console.log(data.ting);
         });
 
-        // This is listening for message called myFunc
-        socket.on('beat', function(data) {
-            console.log(data.ting);
-            clrFade = 255;
-        });
 
         socket.on('liveBeat', function(data) {
             // var thisFade = 255 - data.clr;
             var thisFade = data.clr;
-            // console.log(data.clr);
-            // console.log(thisFade);
             setBoxClr(bgBox, thisFade);
         });
-
-
-        // setBoxClr(bgBox, clrFade);
-
-
-        // setInterval(function() {
-        //     if (clrFade > 1) {
-        //         clrFade -= 5;
-        //     } else {
-        //         clrFade = 0;
-        //     }
-        //     // console.log(clrFade);
-
-        //     setBoxClr(bgBox, clrFade);
-        // }, 10);
-
 
     });
     </script>
