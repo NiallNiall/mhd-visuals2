@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Music Hackday Visuals</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css" />
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="vendor/hammer.min.js"></script>
+    <script src="vendor/hammer-time.min.js"></script>
+    <script src="vendor/paper-full.js"></script>
+
+    <style>
+        body {
+            background-color: #000;
+        }
+        </style>
+</head>
+
+<body>
+    <canvas id="paperCanvas" class="fullWidthCanvas" resize></canvas>
+
+    <div id="mainbox" class="fullwidth"></div>
+    <script>
+
+
+
+var Simple1DNoise = function() {
+    var MAX_VERTICES = 256;
+    var MAX_VERTICES_MASK = MAX_VERTICES -1;
+    var amplitude = 1;
+    var scale = 1;
+
+    var r = [];
+
+    for ( var i = 0; i < MAX_VERTICES; ++i ) {
+        r.push(Math.random());
+    }
+
+    var getVal = function( x ){
+        var scaledX = x * scale;
+        var xFloor = Math.floor(scaledX);
+        var t = scaledX - xFloor;
+        var tRemapSmoothstep = t * t * ( 3 - 2 * t );
+
+        /// Modulo using &
+        var xMin = xFloor & MAX_VERTICES_MASK;
+        var xMax = ( xMin + 1 ) & MAX_VERTICES_MASK;
+
+        var y = lerp( r[ xMin ], r[ xMax ], tRemapSmoothstep );
+
+        return y * amplitude;
+    };
+
+    /**
+    * Linear interpolation function.
+    * @param a The lower integer value
+    * @param b The upper integer value
+    * @param t The value between the two
+    * @returns {number}
+    */
+    var lerp = function(a, b, t ) {
+        return a * ( 1 - t ) + b * t;
+    };
+
+    // return the API
+    return {
+        getVal: getVal,
+        setAmplitude: function(newAmplitude) {
+            amplitude = newAmplitude;
+        },
+        setScale: function(newScale) {
+            scale = newScale;
+        }
+    };
+};
+
+
+
+var namp = 100;
+var nscale = 0.05;
+
+var generator = new Simple1DNoise();
+var x = 1;
+var y = generator.getVal(x);
+generator.setAmplitude(namp);
+generator.setScale(nscale);
+
+
+
+    var flashing = false;
+    var clrFade = 255;
+
+    var bgBox = document.getElementById("mainbox");
+
+    var myCanvas = document.getElementById("paperCanvas");
+
+
+    function clearCanvas(){
+        ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
+    }
+
+    function drawCircle(x, y, radius){
+       ctx.beginPath();
+        ctx.arc(x,y,radius,0,Math.PI*2);
+        ctx.lineWidth=5;
+        ctx.strokeStyle = 'White';
+        ctx.stroke();     
+    }
+
+    function drawPixel(x, y){
+        ctx.beginPath();
+        ctx.rect(x,y,5,5);
+        ctx.fillStyle = 'White';
+        ctx.fill();     
+    }
+
+    // Converts from degrees to radians.
+    Math.radians = function(degrees) {
+      return degrees * Math.PI / 180;
+    };
+
+    var getCircleXPos = function(thisx, inc, Radius) {
+      var angle = Math.radians(inc);
+      var x = thisx + Math.sin(angle) * Radius;
+      return x;
+    }
+
+    var getCircleYPos = function(thisy, inc, Radius) {
+      var angle = Math.radians(inc);
+      var y = thisy + Math.cos(angle) * Radius;
+      return y;
+    }
+
+    var sclr = 0;
+
+    function drawNoiseCircle(x, y, radius){
+                        sclr +=1;                
+
+        generator.setAmplitude(radius/2);
+
+
+       for(var i = 0; i < 360; i+=1){
+        // var rndrad = Math.floor((Math.random() * radius) + 70);
+
+        var rndrad = 150 + generator.getVal(sclr+i);
+
+        var outx = getCircleXPos(x,i, rndrad);
+        var outy = getCircleYPos(y,i, rndrad);
+
+        // var outx = getCircleXPos(x,i, radius);
+        // var outy = getCircleYPos(y,i, radius);
+        drawPixel(outx, outy);
+       }  
+    }
+
+    myCanvas.width = window.innerWidth;
+    myCanvas.height = window.innerHeight;
+    var ctx = myCanvas.getContext("2d");
+
+    var x1 = myCanvas.width/2;
+    var y1 = myCanvas.height/2;
+
+    // drawCircle(x1, y1, 50);
+    drawNoiseCircle(x1, y1, 200);
+
+
+    function setBoxClr(thisBox, thisClr) {
+        thisBox.style.background = 'rgba(' + thisClr + ', ' + thisClr + ', ' + thisClr + ',1.0)';
+    }
+
+    // The problem was I just needed to use io.emit!
+    document.addEventListener("DOMContentLoaded", function() {
+
+        var socket = io.connect();
+
+        // This is listening for message called myFunc
+        socket.on('myFunc', function(data) {
+            console.log(data.ting);
+        });
+
+
+        socket.on('liveBeat', function(data) {
+            // var thisFade = 255 - data.clr;
+            var thisFade = data.clr;
+            clearCanvas();
+
+            if(thisFade > 200){
+                sclr +=1;                
+            }
+
+
+            // drawCircle(x1, y1, thisFade);
+            drawNoiseCircle(x1, y1, thisFade);
+            if(flashing) {
+                setBoxClr(bgBox, thisFade);
+            }
+        });
+
+    });
+
+
+    </script>
+</body>
+
+</html>
