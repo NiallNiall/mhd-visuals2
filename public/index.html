@@ -3,6 +3,8 @@
 
 <head>
     <title>Music Hackday Visuals</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="style.css" />
 
     <script src="/socket.io/socket.io.js"></script>
@@ -32,8 +34,6 @@
 
     function clearCanvas(){
         ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
-        ctx.fillStyle = 'Black';
-        ctx.fill();
     }
 
     function drawCircle(x, y, radius){
@@ -46,7 +46,7 @@
 
     function drawPixel(x, y){
         ctx.beginPath();
-        ctx.rect(x,y,3,3);
+        ctx.rect(x,y,5,5);
         ctx.fillStyle = 'White';
         ctx.fill();     
     }
@@ -69,7 +69,7 @@
     }
 
     function drawNoiseCircle(x, y, radius){
-       for(var i = 0; i < 360; i++){
+       for(var i = 0; i < 360; i+=5){
         var rndrad = Math.floor((Math.random() * radius) + 70);;
 
         var outx = getCircleXPos(x,i, rndrad);
