@@ -23,6 +23,10 @@ function jsMap(val, A, B, a, b) {
     return mapd;
 }
 
+function jsClamp(num, min, max) {
+  return num <= min ? min : num >= max ? max : num;
+}
+
 
 input.on('pitch', function(msg) {
     // console.log(msg);
@@ -36,7 +40,7 @@ input.on('pitch', function(msg) {
         // Weird mapping to resync the beat phase
         if(valInst < 64) {reVal = 64 + valInst;} else {reVal = -64 + valInst;}
 
-        var thisVal = Math.floor(jsMap(reVal, 0, 50 , 255, 0));
+        var thisVal = jsClamp(Math.floor(jsMap(reVal, 0, 50 , 255, 0)), 0, 255);
         io.emit('liveBeat', {'clr': thisVal});
         // console.log(valInst + ' / ' + reVal + ' / ' + thisVal);
     }

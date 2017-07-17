@@ -22,9 +22,75 @@
 
     <div id="mainbox" class="fullwidth"></div>
     <script>
+    var flashing = false;
     var clrFade = 255;
 
     var bgBox = document.getElementById("mainbox");
+
+    var myCanvas = document.getElementById("paperCanvas");
+
+
+    function clearCanvas(){
+        ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
+        ctx.fillStyle = 'Black';
+        ctx.fill();
+    }
+
+    function drawCircle(x, y, radius){
+       ctx.beginPath();
+        ctx.arc(x,y,radius,0,Math.PI*2);
+        ctx.lineWidth=5;
+        ctx.strokeStyle = 'White';
+        ctx.stroke();     
+    }
+
+    function drawPixel(x, y){
+        ctx.beginPath();
+        ctx.rect(x,y,3,3);
+        ctx.fillStyle = 'White';
+        ctx.fill();     
+    }
+
+    // Converts from degrees to radians.
+    Math.radians = function(degrees) {
+      return degrees * Math.PI / 180;
+    };
+
+    var getCircleXPos = function(thisx, inc, Radius) {
+      var angle = Math.radians(inc);
+      var x = thisx + Math.sin(angle) * Radius;
+      return x;
+    }
+
+    var getCircleYPos = function(thisy, inc, Radius) {
+      var angle = Math.radians(inc);
+      var y = thisy + Math.cos(angle) * Radius;
+      return y;
+    }
+
+    function drawNoiseCircle(x, y, radius){
+       for(var i = 0; i < 360; i++){
+        var rndrad = Math.floor((Math.random() * radius) + 70);;
+
+        var outx = getCircleXPos(x,i, rndrad);
+        var outy = getCircleYPos(y,i, rndrad);
+
+        // var outx = getCircleXPos(x,i, radius);
+        // var outy = getCircleYPos(y,i, radius);
+        drawPixel(outx, outy);
+       }  
+    }
+
+    myCanvas.width = window.innerWidth;
+    myCanvas.height = window.innerHeight;
+    var ctx = myCanvas.getContext("2d");
+
+    var x1 = myCanvas.width/2;
+    var y1 = myCanvas.height/2;
+
+    // drawCircle(x1, y1, 50);
+    drawNoiseCircle(x1, y1, 200);
+
 
     function setBoxClr(thisBox, thisClr) {
         thisBox.style.background = 'rgba(' + thisClr + ', ' + thisClr + ', ' + thisClr + ',1.0)';
@@ -44,89 +110,15 @@
         socket.on('liveBeat', function(data) {
             // var thisFade = 255 - data.clr;
             var thisFade = data.clr;
-            setBoxClr(bgBox, thisFade);
+            clearCanvas();
+            // drawCircle(x1, y1, thisFade);
+            drawNoiseCircle(x1, y1, thisFade);
+            if(flashing) {
+                setBoxClr(bgBox, thisFade);
+            }
         });
 
     });
-
-var myElement = document.getElementById('paperCanvas');
-var mc = new Hammer(myElement);
-
-
-paper.install(window);
-// Only executed our code once the DOM is ready.
-window.onload = function() {
-
-    // Get a reference to the canvas object
-    var canvas = document.getElementById('paperCanvas');
-    // Create an empty project and a view for the canvas:
-    paper.setup(canvas);
-
-    var myCircle = new paper.Path.Circle(new Point(100, 70), 50);
-    myCircle.fillColor = 'Red';
-
-        // Draw the view now:
-    paper.view.draw();
-
-
-    var mouseTool = new paper.Tool();
-
-
-
-    mouseTool.onMouseDown = function(event) {
-    }
-
-    mouseTool.onMouseDrag = function(event) {
-        myCircle.position = event.point;
-    }
-
-    mouseTool.onMouseUp = function(event) {
-
-    }
-
-
-//  //Listen multitouch event for simultation
-// document.body.addEventListener('touchstart', touchStart, false);
-// document.body.addEventListener('touchmove', touchmove, false);
-// document.body.addEventListener('touchend', touchEnd, false);
-
-// var touch = false;
-// function touchStart()
-// {
-//     touch = true;
-// }
-
-// function touchEnd()
-// {
-//     touch = false;
-
-// }
-
-// function touchmove(ev) {
-
-//     if (!touch)
-//         return;
-
-//      //Draw path for each touch
-//     for (var i = 0; i < ev.changedTouches.length; i++)
-//     {
-//         var x1, y1;
-//         x1 = ev.changedTouches[i].pageX;
-//         y1 = ev.changedTouches[i].pageY;
-
-//         myCircle.position = new paper.Point(x1, y1);
-//         // paper.view.draw();
-//         // console.log(x1 + ' ' + y1);
-//     }
-
-
-//     // console.log(ev);
-// }
-
-}
-
-
-
 
 
     </script>

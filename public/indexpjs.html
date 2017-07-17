@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Music Hackday Visuals</title>
+    <link rel="stylesheet" href="style.css" />
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="vendor/hammer.min.js"></script>
+    <script src="vendor/hammer-time.min.js"></script>
+    <script src="vendor/paper-full.js"></script>
+
+    <style>
+        body {
+            background-color: #000;
+        }
+        </style>
+</head>
+
+<body>
+    <canvas id="paperCanvas" class="fullWidthCanvas" resize></canvas>
+
+    <div id="mainbox" class="fullwidth"></div>
+    <script>
+    var flashing = false;
+    var clrFade = 255;
+
+    var bgBox = document.getElementById("mainbox");
+
+    function setBoxClr(thisBox, thisClr) {
+        thisBox.style.background = 'rgba(' + thisClr + ', ' + thisClr + ', ' + thisClr + ',1.0)';
+    }
+
+    // The problem was I just needed to use io.emit!
+    document.addEventListener("DOMContentLoaded", function() {
+
+        var socket = io.connect();
+
+        // This is listening for message called myFunc
+        socket.on('myFunc', function(data) {
+            console.log(data.ting);
+        });
+
+
+        socket.on('liveBeat', function(data) {
+            // var thisFade = 255 - data.clr;
+            var thisFade = data.clr;
+            if(flashing) {
+                setBoxClr(bgBox, thisFade);
+            }
+        });
+
+    });
+
+var myElement = document.getElementById('paperCanvas');
+var mc = new Hammer(myElement);
+
+
+paper.install(window);
+// Only executed our code once the DOM is ready.
+window.onload = function() {
+
+    // Get a reference to the canvas object
+    var canvas = document.getElementById('paperCanvas');
+    // Create an empty project and a view for the canvas:
+    paper.setup(canvas);
+
+    var myCircle = new paper.Path.Circle(new Point(100, 70), 50);
+    myCircle.fillColor = 'Red';
+
+        // Draw the view now:
+    paper.view.draw();
+
+
+    var mouseTool = new paper.Tool();
+
+
+
+    mouseTool.onMouseDown = function(event) {
+    }
+
+    mouseTool.onMouseDrag = function(event) {
+        myCircle.position = event.point;
+    }
+
+    mouseTool.onMouseUp = function(event) {
+
+    }
+
+
+//  //Listen multitouch event for simultation
+// document.body.addEventListener('touchstart', touchStart, false);
+// document.body.addEventListener('touchmove', touchmove, false);
+// document.body.addEventListener('touchend', touchEnd, false);
+
+// var touch = false;
+// function touchStart()
+// {
+//     touch = true;
+// }
+
+// function touchEnd()
+// {
+//     touch = false;
+
+// }
+
+// function touchmove(ev) {
+
+//     if (!touch)
+//         return;
+
+//      //Draw path for each touch
+//     for (var i = 0; i < ev.changedTouches.length; i++)
+//     {
+//         var x1, y1;
+//         x1 = ev.changedTouches[i].pageX;
+//         y1 = ev.changedTouches[i].pageY;
+
+//         myCircle.position = new paper.Point(x1, y1);
+//         // paper.view.draw();
+//         // console.log(x1 + ' ' + y1);
+//     }
+
+
+//     // console.log(ev);
+// }
+
+}
+
+
+
+
+
+    </script>
+</body>
+
+</html>
