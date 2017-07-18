@@ -8,8 +8,6 @@
     <link rel="stylesheet" href="style.css" />
 
     <script src="/socket.io/socket.io.js"></script>
-    <script src="vendor/hammer.min.js"></script>
-    <script src="vendor/hammer-time.min.js"></script>
     <script src="vendor/paper-full.js"></script>
 
     <style>
@@ -77,6 +75,12 @@ var Simple1DNoise = function() {
     };
 };
 
+// Initiliase a function to make maps
+function jsMap(val, A, B, a, b) {
+    var mapd = (val - A) * (b - a) / (B - A) + a
+    return mapd;
+}
+
 
 
 var namp = 100;
@@ -87,6 +91,8 @@ var x = 1;
 var y = generator.getVal(x);
 generator.setAmplitude(namp);
 generator.setScale(nscale);
+
+var styleCnt = 0;
 
 
 
@@ -139,19 +145,31 @@ generator.setScale(nscale);
     function drawNoiseCircle(x, y, radius){
                         sclr +=1;                
 
-        generator.setAmplitude(radius/2);
+        generator.setAmplitude(radius/5);
 
 
        for(var i = 0; i < 360; i+=1){
         // var rndrad = Math.floor((Math.random() * radius) + 70);
 
-        var rndrad = 150 + generator.getVal(sclr+i);
+
+        var rndrad = 75 + generator.getVal(sclr+i);
 
         var outx = getCircleXPos(x,i, rndrad);
         var outy = getCircleYPos(y,i, rndrad);
 
         // var outx = getCircleXPos(x,i, radius);
         // var outy = getCircleYPos(y,i, radius);
+        drawPixel(outx, outy);
+       }  
+    }
+
+    function drawRndCircle(x, y, radius){
+
+       for(var i = 0; i < 360; i+=1){
+        var rndrad = Math.floor((Math.random() * radius) + 70);
+        var outx = getCircleXPos(x,i, rndrad);
+        var outy = getCircleYPos(y,i, rndrad);
+
         drawPixel(outx, outy);
        }  
     }
@@ -164,7 +182,7 @@ generator.setScale(nscale);
     var y1 = myCanvas.height/2;
 
     // drawCircle(x1, y1, 50);
-    drawNoiseCircle(x1, y1, 200);
+    // drawNoiseCircle(x1, y1, 200);
 
 
     function setBoxClr(thisBox, thisClr) {
@@ -191,15 +209,51 @@ generator.setScale(nscale);
                 sclr +=1;                
             }
 
+            switch(styleCnt) {
+                case 0:
+                    setBoxClr(bgBox, thisFade);
+                    break;
+                case 1:
+                    drawNoiseCircle(x1, y1, thisFade);
+                    break;
+                case 2:
+                    drawRndCircle(x1, y1, thisFade/4);
+                    break;
+                default:
+                    setBoxClr(bgBox, thisFade);
+            }
 
             // drawCircle(x1, y1, thisFade);
-            drawNoiseCircle(x1, y1, thisFade);
-            if(flashing) {
-                setBoxClr(bgBox, thisFade);
-            }
+            // drawNoiseCircle(x1, y1, thisFade);
+            // drawRndCircle(x1, y1, thisFade/4);
+            // if(flashing) {
+            //     setBoxClr(bgBox, thisFade);
+            // }
         });
 
     });
+
+// function thing(event){
+//     console.log('dddd');
+// }
+
+
+window.onmousedown = function(){
+    // console.log('yoyoyo');
+    if(styleCnt <= 2){
+        styleCnt +=1;
+    } else {
+        styleCnt = 0;
+    }
+};
+
+window.ontouchstart = function(){
+    if(styleCnt <= 2){
+        styleCnt +=1;
+    } else {
+        styleCnt = 0;
+    }
+}
 
 
     </script>
