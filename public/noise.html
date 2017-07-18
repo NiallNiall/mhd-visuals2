@@ -214,9 +214,11 @@ var styleCnt = 0;
                     setBoxClr(bgBox, thisFade);
                     break;
                 case 1:
+                    // setBoxClr(bgBox, 0);
                     drawNoiseCircle(x1, y1, thisFade);
                     break;
                 case 2:
+                    // setBoxClr(bgBox, 0);
                     drawRndCircle(x1, y1, thisFade/4);
                     break;
                 default:
@@ -240,7 +242,7 @@ var styleCnt = 0;
 
 window.onmousedown = function(){
     // console.log('yoyoyo');
-    if(styleCnt <= 2){
+    if(styleCnt < 2){
         styleCnt +=1;
     } else {
         styleCnt = 0;
